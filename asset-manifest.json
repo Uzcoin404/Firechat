@@ -1,0 +1,24 @@
+{
+  "files": {
+    "main.css": "/static/css/main.cd9476d5.css",
+    "main.js": "/static/js/main.f266d1f3.js",
+    "static/js/787.f04d8c20.chunk.js": "/static/js/787.f04d8c20.chunk.js",
+    "static/media/welcomeToChat.svg": "/static/media/welcomeToChat.eeacec912d8b91f1cf735e7dbe7d5e1f.svg",
+    "static/media/noMessages.svg": "/static/media/noMessages.83764de10d91a67979e2de021474f3ab.svg",
+    "static/media/noChats.svg": "/static/media/noChats.d4ccd3fd54572a2a3752d9a09fb243da.svg",
+    "static/media/github.svg": "/static/media/github.113617b9dfd2ca408eb76c1243dc6cf6.svg",
+    "static/media/paperclip.svg": "/static/media/paperclip.78074725f2e5e31fab42d122cbc70c21.svg",
+    "static/media/twitter.svg": "/static/media/twitter.799015df1df7608029402521e3ad58bd.svg",
+    "index.html": "/index.html",
+    "static/media/paper-plane.svg": "/static/media/paper-plane.bb3f90703f318ad07537b99dc07726f7.svg",
+    "static/media/dots.svg": "/static/media/dots.e6355a3616cac29f03031e6dbd584b55.svg",
+    "static/media/facebook.svg": "/static/media/facebook.deb9474199946d66815616ee73503521.svg",
+    "main.cd9476d5.css.map": "/static/css/main.cd9476d5.css.map",
+    "main.f266d1f3.js.map": "/static/js/main.f266d1f3.js.map",
+    "787.f04d8c20.chunk.js.map": "/static/js/787.f04d8c20.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.cd9476d5.css",
+    "static/js/main.f266d1f3.js"
+  ]
+}
