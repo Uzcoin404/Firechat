@@ -145,26 +145,6 @@
             }
         }
     }
-
-    .welcomeAfemeChat, .noChatMessages, .noChats{
-        width: 100%;
-        height: 100%;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        text-align: center;
-        &__text{
-            margin: 0;
-        }
-        .noChats{
-            margin-top: 30px;
-            &__title{
-                font-size: 17px;
-                font-weight: 600;
-            }
-        }
-    }
 }
 
 @media (max-width: 1280px) {

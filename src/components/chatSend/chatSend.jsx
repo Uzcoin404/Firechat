@@ -1,7 +1,8 @@
-import React, { createRef, useState } from "react";
+import React, { createRef, useContext, useState } from "react";
 
 import { addDoc, collection, serverTimestamp } from "firebase/firestore";
 import { db, auth,  } from "../firebase/firebase";
+import { ChatID } from "../../context/chatId";
 
 import {
     IconButton,
@@ -17,7 +18,8 @@ import "./chatSend.scss";
 
 let url = process.env.REACT_APP_URL;
 
-function ChatSend({ messages }) {
+function ChatSend() {
+    const { chatID } = useContext(ChatID);
     const [previewImages, setPreviewImages] = useState();
     const [modalOpen, setModalOpen] = useState(false);
     let msgValue = createRef();
@@ -31,13 +33,14 @@ function ChatSend({ messages }) {
     async function sendMessage(e) {
         e.preventDefault();
         let message = msgValue.current.value.trim();
-        const { uid, displayName } = auth.currentUser;
+        const { uid, displayName } = auth.currentUser.providerData[0];
 
-        // messageChange("");
-        createMessage(message);
+        messageChange("");
+        // createMessage(message);
         await addDoc(collection(db, 'messages'), {
-            text: message,
-            uid,
+            sender: uid,
+            receiver: chatID,
+            message: message,
             date: serverTimestamp()
         });
 
@@ -45,7 +48,8 @@ function ChatSend({ messages }) {
 
     function createMessage(message) {
         const messages = document.querySelector(
-            ".styles_scrollable-div__prSCv"
+            // ".styles_scrollable-div__prSCv"
+            ".bubbles"
         );
         const lastMessage = Array.from(
             document.querySelectorAll(".message")

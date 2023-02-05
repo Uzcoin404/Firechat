@@ -10,17 +10,16 @@ function Provider({ children }) {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        onAuthStateChanged(auth, (newUser) => {
-            setUser({});
+        onAuthStateChanged(auth, (user) => {
+            setUser(user);
             setLoading(false);
         });
     }, []);
 
-    if (loading) {
-        return <Spinner />;
+    if (!loading){
+        return (
+            <UserContext.Provider value={{ user }}>{children}</UserContext.Provider>
+        );
     }
-    return (
-        <UserContext.Provider value={{ user }}>{children}</UserContext.Provider>
-    );
 }
 export { UserContext, Provider };

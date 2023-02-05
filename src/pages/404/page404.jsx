@@ -1,13 +1,10 @@
 import { Box, Typography, Button, Toolbar } from "@mui/material";
-import Nav from "../../components/nav/nav";
 
-import pages from "../../layout/pages";
 import icon404 from "../../assets/img/404.png";
 
 function Page404() {
     return (
         <Box className="404" sx={{ height: "100vh" }}>
-            <Nav pages={pages} isHaveSearch={false} />
             <Box
                 sx={{
                     display: "flex",

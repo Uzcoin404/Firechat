@@ -22,6 +22,7 @@
         }
         &__header {
             display: flex;
+            justify-content: space-between;
             align-items: center;
             height: 60px;
             min-height: 60px;
@@ -51,7 +52,11 @@
         }
         &__chats {
             overflow-y: auto;
+            overflow-x: hidden;
             border-radius: 10px;
+            a .MuiTouchRipple-child {
+                background-color: #357aff;
+            }
         }
         .chatProfile {
             display: flex;
@@ -59,6 +64,8 @@
             padding: 12px;
             border-radius: 10px;
             transition: 0.3s;
+            width: 100%;
+            z-index: 1;
             &:hover,
             &.active {
                 background-color: #8fdafd4d;
@@ -77,10 +84,13 @@
                 padding-left: 15px;
             }
             &__name {
-                -webkit-line-clamp: 1;
-                -webkit-box-orient: vertical;
+                // -webkit-line-clamp: 1;
+                // -webkit-box-orient: vertical;
+                // overflow: hidden;
+                // display: -webkit-box;
+                text-overflow: ellipsis;
                 overflow: hidden;
-                display: -webkit-box;
+                white-space: nowrap;
                 font-weight: 600;
                 font-size: 16px;
                 line-height: 150%;
