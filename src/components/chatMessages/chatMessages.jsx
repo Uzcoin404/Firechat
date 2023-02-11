@@ -48,10 +48,11 @@ function ChatMessages() {
                 (error) => setMessages(null)
             );
         }
+        console.log(messages)
         document.querySelector("#messageInput")?.focus();
     }, [chatID]);
     const messagesBlog = document.querySelector(
-        ".styles_scrollable-div__prSCv"
+        ".bubbless"
     );
     const scrollBottomBtn = document.querySelector(".scrollBottom");
 
@@ -70,10 +71,9 @@ function ChatMessages() {
         return (
             <div className="welcomeChat">
                 <img src={welcomeToChat} alt="" className="welcomeChat__img" />
-                <h3 className="welcomeChat__title">Chatga xush kelibsiz</h3>
+                <h3 className="welcomeChat__title">Welcome to Firechat</h3>
                 <p className="welcomeChat__text">
-                    Suhbatlashishni boshlash uchun foydalanuvchilardan birini
-                    ustiga bosing
+                   Click on one of user to start conservation
                 </p>
             </div>
         );

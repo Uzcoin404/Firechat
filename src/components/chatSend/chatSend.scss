@@ -86,14 +86,13 @@
     }
     &__group{
         display: grid;
-        grid-template-columns: 1fr 1fr;
         gap: 5px;
     }
     &__image{
         width: 100%;
         height: auto;
         max-width: 400px;
-        max-height: 220px;
+        max-height: 300px;
         object-fit: cover;
         border-radius: 10px;
     }
@@ -105,5 +104,25 @@
     }
     &__btn{
         border-radius: 10px;
+    }
+    .uploaded__image{
+        position: relative;
+        img{
+            filter: brightness(50%);
+        }
+    }
+    .upload__progress{
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        .circularProgress{
+            background-color: rgba(255, 255, 255, 0.5);
+            border-radius: 50%;
+        }
     }
 }

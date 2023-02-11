@@ -1,8 +1,11 @@
 import React, { createRef, useContext, useState } from "react";
 
 import { addDoc, collection, serverTimestamp } from "firebase/firestore";
-import { db, auth,  } from "../firebase/firebase";
+import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
+import { db, storage } from "../firebase/firebase";
 import { ChatID } from "../../context/chatId";
+import uid from "../../utils/uid";
+import { UserContext } from "../../context/auth";
 
 import {
     IconButton,
@@ -10,40 +13,36 @@ import {
     Modal,
     Paper,
     Box,
+    CircularProgress,
+    Typography,
 } from "@mui/material";
 import TimeConverter from "../../utils/timeConverter";
 import PaperClip from "../../assets/img/icon/paperclip.svg";
 import PaperPlane from "../../assets/img/icon/paper-plane.svg";
 import "./chatSend.scss";
 
-let url = process.env.REACT_APP_URL;
-
 function ChatSend() {
     const { chatID } = useContext(ChatID);
-    const [previewImages, setPreviewImages] = useState();
+    const { user } = useContext(UserContext);
+    const [previewImages, setPreviewImages] = useState(null);
     const [modalOpen, setModalOpen] = useState(false);
+    const [picUploadState, setPicUploadState] = useState(0);
     let msgValue = createRef();
-    let previewModal = createRef();
     let fileInput = createRef();
-    const token = localStorage.getItem("Token");
-    const userID = localStorage.getItem("user_id");
-    let headers = new Headers();
-    headers.append("Authorization", `Bearer ${token}`);
 
     async function sendMessage(e) {
         e.preventDefault();
         let message = msgValue.current.value.trim();
-        const { uid, displayName } = auth.currentUser.providerData[0];
 
         messageChange("");
         // createMessage(message);
-        await addDoc(collection(db, 'messages'), {
-            sender: uid,
+        await addDoc(collection(db, "messages"), {
+            sender: user.uid,
             receiver: chatID,
             message: message,
-            date: serverTimestamp()
+            photo: previewImages,
+            date: serverTimestamp(),
         });
-
     }
 
     function createMessage(message) {
@@ -104,28 +103,86 @@ function ChatSend() {
     }
 
     function sendFile() {
-        setModalOpen(false);
+        // setModalOpen(false);
+        console.log(previewImages[0]);
+        const imageRef = ref(
+            storage,
+            "images/" +
+                uid() +
+                "." +
+                previewImages[0].file.name.split(".").pop()
+        );
+        const uploadTask = uploadBytesResumable(
+            imageRef,
+            previewImages[0].file
+        );
+        uploadTask.on(
+            "state_changed",
+            (snapshot) => {
+                setPicUploadState(
+                    (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+                );
+            },
+            (error) => {
+                // Handle unsuccessful uploads
+            },
+            () => {
+                getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+                    console.log("File available at", downloadURL);
+                });
+            }
+        );
     }
 
     function previewImage() {
         const objectUrl = [];
+        let files = fileInput.current.files;
 
-        if (fileInput.current.files.length > 0) {
-            for (let i = 0; i < fileInput.current.files.length; i++) {
-                objectUrl.push(URL.createObjectURL(fileInput.current.files[i]));
+        if (files.length > 0) {
+            for (let i = 0; i < files.length; i++) {
+                objectUrl.push({
+                    file: files[i],
+                    pic: URL.createObjectURL(files[i]),
+                });
             }
             setPreviewImages(objectUrl);
             setModalOpen(true);
         }
+        console.log(objectUrl);
+    }
+
+    function ProgressBar(props) {
+        return (
+            <Box className="circularProgress" sx={{ position: "relative", display: "inline-flex", width: 'max-content' }}>
+                <CircularProgress variant="determinate" {...props} />
+                <Box
+                    sx={{
+                        top: 0,
+                        left: 0,
+                        bottom: 0,
+                        right: 0,
+                        position: "absolute",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                    }}
+                >
+                    <Typography
+                        variant="caption"
+                        component="div"
+                        color="text"
+                    >
+                        {`${Math.round(props.value)}%`}
+                    </Typography>
+                </Box>
+            </Box>
+        );
     }
 
     function PreviewModal() {
         const handleClose = () => setModalOpen(false);
         return (
-            <Modal
-                open={modalOpen}
-                onClose={handleClose}
-            >
+            <Modal open={modalOpen} onClose={handleClose}>
                 <Paper
                     sx={{
                         position: "absolute",
@@ -134,21 +191,34 @@ function ChatSend() {
                         transform: "translate(-50%, -50%)",
                         width: 400,
                         p: 3,
-                        borderRadius: 5
+                        borderRadius: 5,
                     }}
                     className="imagePreview"
                 >
                     <div className="imagePreview__content">
-                        <div className="imagePreview__group">
+                        <Box
+                            className="imagePreview__group"
+                            sx={{
+                                gridTemplateColumns:
+                                    previewImages?.length <= 1
+                                        ? "1fr"
+                                        : "1fr 1fr",
+                            }}
+                        >
                             {previewImages?.map((image, i) => (
-                                <img
-                                    src={image}
-                                    key={i}
-                                    alt=""
-                                    className="imagePreview__image"
-                                />
+                                <Box className={"uploaded__image"( + picUploadState == 100 ? ' active' : '')}>
+                                    <img
+                                        src={image.pic}
+                                        key={i}
+                                        alt=""
+                                        className="imagePreview__image"
+                                    />
+                                    <Box className="upload__progress">
+                                        <ProgressBar value={picUploadState} />
+                                    </Box>
+                                </Box>
                             ))}
-                        </div>
+                        </Box>
                         <div className="imagePreview__buttons">
                             <Button
                                 variant="outlined"
@@ -178,6 +248,7 @@ function ChatSend() {
             action="#"
             className="inputMessage sendMsgForm"
             onSubmit={(e) => sendMessage(e)}
+            style={{ display: !chatID ? "none" : "flex" }}
         >
             <PreviewModal />
             <IconButton className="attachFile" color="primary">
@@ -189,6 +260,7 @@ function ChatSend() {
                     onChange={() => previewImage()}
                     multiple
                     ref={fileInput}
+                    onClick={(event) => (event.target.value = null)}
                 />
             </IconButton>
             <div className="chatInput">

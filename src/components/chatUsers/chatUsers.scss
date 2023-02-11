@@ -48,7 +48,7 @@
         &__main {
             height: 100%;
             overflow-y: auto;
-            margin-top: 15px;
+            margin: 15px 0;
         }
         &__chats {
             overflow-y: auto;
@@ -153,7 +153,6 @@
             transition: all 0.3s;
             background-color: #fff;
             box-shadow: 0 0 8px rgba(0, 0, 0, 0.75);
-
             &.active {
                 left: 0;
             }
@@ -193,6 +192,25 @@
                     font-size: 13px;
                 }
             }
+        }
+    }
+    .source_code_text {
+        display: flex;
+        align-items: center;
+        font-size: 14px;
+        padding: 5px 0 15px;
+        img {
+            width: 20px;
+            margin-left: 5px;
+        }
+    }
+    .social__media {
+        display: flex;
+        align-items: center;
+        column-gap: 15px;
+        padding-top: 5px;
+        img {
+            width: 33px;
         }
     }
 }

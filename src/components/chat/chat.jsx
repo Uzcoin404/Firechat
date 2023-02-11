@@ -1,6 +1,6 @@
 // Import => React
 import React, { useContext, useEffect, useState } from "react";
-
+import { useLocation, useNavigate } from "react-router-dom";
 import { db } from "../firebase/firebase";
 import { query, collection, orderBy, onSnapshot } from "firebase/firestore";
 
@@ -15,7 +15,6 @@ import ChatMessages from "../chatMessages/chatMessages";
 import ChatSend from "../chatSend/chatSend";
 import useWindowDimensions from "../../utils/windowDimension";
 import ArrowLeft from "../../lib/icons/arrowLeft";
-import ArrowDown from "../../lib/icons/arrowDown";
 import Dots from "../../assets/img/icon/dots.svg";
 
 // Import => Style
@@ -24,13 +23,16 @@ import "aos/dist/aos.css";
 
 function Chat() {
     const { user } = useContext(UserContext);
-    const { chatID } = useContext(ChatID);
+    const { chatID, setChatID } = useContext(ChatID);
     const [chatUser, setChatUser] = useState(true);
     const { windowWidth } = useWindowDimensions();
+    const location = useLocation();
+    const navigate = useNavigate();
 
-    console.log(chatID)
     useEffect(() => {
-    }, [chatID]);
+        setChatID(location.pathname.substring(1));
+        console.log(chatID);
+    }, [location]);
 
     useEffect(() => {
         setTimeout(() => {
@@ -53,19 +55,18 @@ function Chat() {
             <ChatUsers />
 
             <Box component="section" className="messagesPanel">
-                <Box className="messagesPanel__header">
-                    {windowWidth > 768 ? (
-                        ""
-                    ) : (
-                        <IconButton
-                            className="chatMenuBtn"
-                            variant="text"
-                            color="primary"
-                            href="#"
-                        >
-                            <ArrowLeft />
-                        </IconButton>
-                    )}
+                <Box
+                    className="messagesPanel__header"
+                    style={{ display: !chatID ? "none" : "flex" }}
+                >
+                    <IconButton
+                        className="chat_menu_btn"
+                        color="primary"
+                        onClick={() => navigate("/")}
+                    >
+                        <ArrowLeft />
+                    </IconButton>
+
                     <Box className="chatProfile">
                         <Avatar
                             src={chatUser.image}
@@ -88,7 +89,7 @@ function Chat() {
 
                 <ChatMessages />
 
-                <ChatSend/>
+                <ChatSend />
             </Box>
 
             <Box component="section" className="infoPanel" sx={{ mt: 10 }}>

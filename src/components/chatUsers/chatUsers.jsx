@@ -1,8 +1,7 @@
 import React, { useState, useContext, createRef, useEffect } from "react";
 import { query, collection, orderBy, onSnapshot } from "firebase/firestore";
 import { db } from "../firebase/firebase";
-import { NavLink as Link } from "react-router-dom";
-import { v4 } from "uuid";
+import { NavLink as Link, useNavigate } from "react-router-dom";
 import { ChatID } from "../../context/chatId";
 
 import { auth } from "../firebase/firebase";
@@ -12,6 +11,9 @@ import { UserContext } from "../../context/auth";
 import useWindowDimensions from "../../utils/windowDimension";
 import TimeConverter from "../../utils/timeConverter";
 import noChatsIcon from "../../assets/img/icon/noChats.svg";
+import githubIcon from "../../assets/img/icon/github.svg"
+import facebookIcon from "../../assets/img/icon/facebook.svg";
+import twitterIcon from "../../assets/img/icon/twitter.svg"
 import "./chatUsers.scss";
 
 function ChatUsers() {
@@ -20,7 +22,8 @@ function ChatUsers() {
     const [chats, setChats] = useState("loading");
     const userIndicator = createRef();
     const { windowWidth } = useWindowDimensions();
-    const isOpen = windowWidth < 768 && !chatID ? true : false;
+    const isOpen = windowWidth <= 768 && !chatID ? true : false;
+    const navigate = useNavigate();
 
     useEffect(() => {
         const q = query(collection(db, "users"));
@@ -50,13 +53,15 @@ function ChatUsers() {
                             <ButtonBase
                                 LinkComponent="a"
                                 focusRipple
-                                href={`#${chatUserId}`}
+                                href={chatUserId}
                                 id={chatUserId}
-                                key={v4()}
-                                onClick={() => {
+                                key={chatUserId}
+                                onClick={(e) => {
+                                    e.preventDefault();
                                     userIndicator.current?.classList.remove(
                                         "active"
                                     );
+                                    navigate("/" + chatUserId);
                                 }}
                                 sx={{ width: "100%" }}
                             >
@@ -120,7 +125,7 @@ function ChatUsers() {
         <section className={isOpen ? "chatsPanel active" : "chatsPanel"}>
             <div className="chatsPanel__header">
                 <Link to="/" className="chatsPanel__logo">
-                    <h4 className="chatsPanel__header__title">Messages</h4>
+                    <h4 className="chatsPanel__header__title">Firechat</h4>
                 </Link>
                 <Button variant="outlined" color="error" onClick={logOut}>
                     Log out
@@ -129,7 +134,6 @@ function ChatUsers() {
             <div className="chatsPanel__main">
                 <div className="chatsPanel__chats">{showChats()}</div>
             </div>
-            <div>Soruce Code</div>
         </section>
     );
 }
