@@ -1,7 +1,7 @@
 import React from "react";
 
 import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
-import { auth, db } from "../../components/firebase/firebase";
+import { auth, db } from "../components/firebase/firebase";
 import { doc, setDoc } from "firebase/firestore";
 import { Box, Button } from "@mui/material";
 import { useNavigate } from "react-router-dom";

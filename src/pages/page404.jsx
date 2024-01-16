@@ -1,6 +1,6 @@
 import { Box, Typography, Button, Toolbar } from "@mui/material";
 
-import icon404 from "../../assets/img/404.png";
+import icon404 from "../assets/img/404.png";
 
 function Page404() {
     return (

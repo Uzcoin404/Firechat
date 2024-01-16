@@ -3,8 +3,8 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 
 import { UserContext } from "./context/auth";
 import Chat from "./components/chat/chat";
-import Page404 from "./pages/404/page404";
-import Auth from "./pages/auth/auth";
+import Page404 from "./pages/page404";
+import Auth from "./pages/auth";
 
 import "./App.scss";
 const isMobile = navigator.userAgentData.mobile;
